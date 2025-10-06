@@ -34,6 +34,7 @@ Proyecto ASP.NET Core MVC para gestionar libros, usuarios y préstamos.
      │   ├── Book/
      │   ├── User/
      │   └── Loan/
+     |   └── History/
      │
      └── wwwroot/
 
