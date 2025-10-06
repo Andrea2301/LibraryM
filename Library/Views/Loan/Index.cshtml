@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Library.Models.Loan>
+
+    @{
+    ViewData["Title"] = "Gestión de Préstamos";
+    }
+
+    <div class="container mt-4">
+        <h2 class="mb-4">Gestión de Préstamos</h2>
+
+        @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+        <!-- Formulario de creación -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">Registrar nuevo préstamo</div>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <label class="form-label">Usuario</label>
+                            <select name="UserId" class="form-select" required>
+                                <option value="">Seleccione un usuario</option>
+                                @foreach (var user in ViewBag.Users)
+                            {
+                                <option value="@user.Id">@user.Name</option>
+                            }
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Libro</label>
+                            <select name="BookId" class="form-select" required>
+                                <option value="">Seleccione un libro</option>
+                                @foreach (var book in ViewBag.Books)
+                            {
+                                <option value="@book.Id">@book.Title (@book.AvailableCopies disponibles)</option>
+                            }
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-success w-100">Prestar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabla de préstamos -->
+        <div class="card">
+            <div class="card-header bg-dark text-white">Lista de préstamos</div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Libro</th>
+                            <th>Fecha de Devolución</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var loan in Model)
+                {
+                        <tr>
+                            <td>@loan.User.Name</td>
+                            <td>@loan.Book.Title</td>
+                            <td>@loan.ReturnDate.ToShortDateString()</td>
+                            <td>
+                                <form asp-action="Return" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@loan.Id" />
+                                    <button type="submit" class="btn btn-sm btn-warning"
+                                            onclick="return confirm('¿Registrar devolución de este libro?')">
+                                        Devolver
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

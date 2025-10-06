@@ -1,0 +1,6 @@
+bin/
+obj/
+*.db
+appsettings.Development.json
+.vs/
+.idea/

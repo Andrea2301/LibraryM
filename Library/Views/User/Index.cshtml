@@ -1,0 +1,146 @@
+@model IEnumerable<Library.Models.User>
+
+    @{
+    ViewData["Title"] = "Gestión de Usuarios";
+    }
+
+    <div class="container mt-4">
+        <h2 class="mb-4">Gestión de Usuarios</h2>
+
+        <!-- Botón para abrir modal de registro -->
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Agregar Usuario</button>
+
+        @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Documento</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+        {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Document</td>
+                    <td>@user.Email</td>
+                    <td>@user.Phone</td>
+                    <td>
+                        <!-- Botón Editar -->
+                        <button class="btn btn-sm btn-warning"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editModal"
+                                data-id="@user.Id"
+                                data-name="@user.Name"
+                                data-document="@user.Document"
+                                data-email="@user.Email"
+                                data-phone="@user.Phone">
+                            Editar
+                        </button>
+
+                        <!-- Formulario Eliminar -->
+                        <form asp-action="Delete" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@user.Id" />
+                            <button class="btn btn-sm btn-danger" type="submit"
+                                    onclick="return confirm('¿Eliminar este usuario?')">
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal Crear -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="Create" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Usuario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label>Nombre</label>
+                            <input type="text" name="Name" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label>Documento</label>
+                            <input type="text" name="Document" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <input type="email" name="Email" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>Teléfono</label>
+                            <input type="text" name="Phone" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="Edit" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Usuario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="Id" id="edit-id" />
+                        <div class="mb-3">
+                            <label>Nombre</label>
+                            <input type="text" name="Name" id="edit-name" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label>Documento</label>
+                            <input type="text" name="Document" id="edit-document" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <input type="email" name="Email" id="edit-email" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>Teléfono</label>
+                            <input type="text" name="Phone" id="edit-phone" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para llenar modal editar -->
+    <script>
+    const editModal = document.getElementById('editModal');
+    editModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        document.getElementById('edit-id').value = button.getAttribute('data-id');
+        document.getElementById('edit-name').value = button.getAttribute('data-name');
+        document.getElementById('edit-document').value = button.getAttribute('data-document');
+        document.getElementById('edit-email').value = button.getAttribute('data-email');
+        document.getElementById('edit-phone').value = button.getAttribute('data-phone');
+    });
+    </script>
