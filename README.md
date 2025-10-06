@@ -18,6 +18,8 @@ Proyecto ASP.NET Core MVC para gestionar libros, usuarios y préstamos.
      │   ├── BookController.cs
      │   ├── UserController.cs
      │   └── LoanController.cs
+     |   └── History.cs
+     
      │
      ├── Models/
      │   ├── Book.cs
